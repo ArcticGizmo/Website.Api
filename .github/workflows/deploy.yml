@@ -34,7 +34,7 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           tags: |
-            type=semver,pattern={{major}}.{{minor}}.{{patch}}
+            type=semver,pattern={{version}}
           images: ${{ env.REGISTRY_NAMESPACE }}/${{ env.IMAGE_NAME }}
 
       # - name: Deploy
