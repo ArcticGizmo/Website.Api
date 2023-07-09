@@ -25,9 +25,15 @@ jobs:
       #   run: ./build.sh DockerPush -ImageName ${{ env.IMAGE_NAME }} -GithubToken ${{ secrets.GITHUB_TOKEN }}
       #   shell: bash
 
-      - name: Git Version
-        id: version
-        uses: codacy/git-version@2.8.0
+      # - name: Git Version
+      #   id: version
+      #   uses: codacy/git-version@2.8.0
+
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: name/app
 
       # - name: Deploy
       #   run: |
