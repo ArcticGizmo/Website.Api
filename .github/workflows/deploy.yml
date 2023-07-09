@@ -31,7 +31,8 @@ jobs:
 
       - name: 'Get Previous tag'
         id: currenttag
-        uses: "WyriHaximus/github-action-get-previous-tag@v1"
+        uses: paulhatch/semantic-version@v5.0.2
+
 
       # - name: Docker meta
       #   id: meta
