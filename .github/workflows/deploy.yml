@@ -29,13 +29,17 @@ jobs:
       #   id: version
       #   uses: codacy/git-version@2.8.0
 
-      - name: Docker meta
-        id: meta
-        uses: docker/metadata-action@v4
-        with:
-          tags: |
-            type=semver,pattern={{version}}
-          images: ${{ env.REGISTRY_NAMESPACE }}/${{ env.IMAGE_NAME }}
+      - name: 'Get Previous tag'
+        id: currenttag
+        uses: "WyriHaximus/github-action-get-previous-tag@v1"
+
+      # - name: Docker meta
+      #   id: meta
+      #   uses: docker/metadata-action@v4
+      #   with:
+      #     tags: |
+      #       type=semver,pattern={{version}}
+      #     images: ${{ env.REGISTRY_NAMESPACE }}/${{ env.IMAGE_NAME }}
 
       # - name: Deploy
       #   run: |
