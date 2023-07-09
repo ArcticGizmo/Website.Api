@@ -18,8 +18,7 @@ jobs:
       packages: write
     steps:
       - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
+
 
       # - name: Build and push image to Github Container Registry
       #   run: ./build.sh DockerPush -ImageName ${{ env.IMAGE_NAME }} -GithubToken ${{ secrets.GITHUB_TOKEN }}
