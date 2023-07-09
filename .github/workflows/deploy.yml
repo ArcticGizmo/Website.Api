@@ -29,11 +29,15 @@ jobs:
     name: "Trigger deploy on Render"
     runs-on: ubuntu-latest
     steps:
+      - name: Determine Version
+        id:   gitversion # id to later be referenced
+        uses: gittools/actions/gitversion/execute@v0
+
       - name: Deploy
         run: |
           curl -G \
             --data-urlencode "key=${{ secrets.RENDER_SRV_KEY }}" \
-            --data-urlencode "imagURL=${{ env.REGISTRY }}/${{ env.REGISTRY_NAMESAPCE }}/${{ env.IMAGE_NAME }}:0.0.6" \
+            --data-urlencode "imagURL=${{ env.REGISTRY }}/${{ env.REGISTRY_NAMESAPCE }}/${{ env.IMAGE_NAME }}:${{ steps.gitversion.outputs.SemVer }}" \
             https://api.render.com/deploy/${{ secrets.RENDER_SRV }}
         shell: bash
 
