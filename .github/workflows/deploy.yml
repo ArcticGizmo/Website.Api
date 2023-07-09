@@ -21,18 +21,18 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Build and push image to Github Container Registry
-        run: ./build.sh DockerPush -ImageName ${{ env.IMAGE_NAME }} -GithubToken ${{ secrets.GITHUB_TOKEN }}
-        shell: bash
+      # - name: Build and push image to Github Container Registry
+      #   run: ./build.sh DockerPush -ImageName ${{ env.IMAGE_NAME }} -GithubToken ${{ secrets.GITHUB_TOKEN }}
+      #   shell: bash
 
-      - name: Determine Version
-        id: gitversion # id to later be referenced
-        uses: gittools/actions/gitversion/execute@v0
+      - name: Git Version
+        id: version
+        uses: codacy/git-version@2.8.0
 
-      - name: Deploy
-        run: |
-          curl -G \
-            --data-urlencode "key=${{ secrets.RENDER_SRV_KEY }}" \
-            --data-urlencode "imagURL=${{ env.REGISTRY }}/${{ env.REGISTRY_NAMESAPCE }}/${{ env.IMAGE_NAME }}:${{ steps.gitversion.outputs.SemVer }}" \
-            https://api.render.com/deploy/${{ secrets.RENDER_SRV }}
-        shell: bash
+      # - name: Deploy
+      #   run: |
+      #     curl -G \
+      #       --data-urlencode "key=${{ secrets.RENDER_SRV_KEY }}" \
+      #       --data-urlencode "imagURL=${{ env.REGISTRY }}/${{ env.REGISTRY_NAMESAPCE }}/${{ env.IMAGE_NAME }}:${{ steps.gitversion.outputs.SemVer }}" \
+      #       https://api.render.com/deploy/${{ secrets.RENDER_SRV }}
+      #   shell: bash
