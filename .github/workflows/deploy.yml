@@ -2,7 +2,7 @@ name: Deploy to Render
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
 
 env:
   REGISTRY: ghcr.io
@@ -10,27 +10,23 @@ env:
   IMAGE_NAME: website-api
 
 jobs:
-  # docker-build-and-push: 
-  #   name: Build & Push Docker Image
-  #   runs-on: ubuntu-latest
-  #   permissions:
-  #     contents: read
-  #     packages: write
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #       with:
-  #         fetch-depth: 0
-          
-  #     - name: Build and push image to Github Container Registry
-  #       run: ./build.sh DockerPush -ImageName ${{ env.IMAGE_NAME }} -GithubToken ${{ secrets.GITHUB_TOKEN }}
-  #       shell: bash
-
-  deploy-to-render:
-    name: "Trigger deploy on Render"
+  docker-build-and-push:
+    name: Build & Push Docker Image
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Build and push image to Github Container Registry
+        run: ./build.sh DockerPush -ImageName ${{ env.IMAGE_NAME }} -GithubToken ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+
       - name: Determine Version
-        id:   gitversion # id to later be referenced
+        id: gitversion # id to later be referenced
         uses: gittools/actions/gitversion/execute@v0
 
       - name: Deploy
@@ -40,4 +36,3 @@ jobs:
             --data-urlencode "imagURL=${{ env.REGISTRY }}/${{ env.REGISTRY_NAMESAPCE }}/${{ env.IMAGE_NAME }}:${{ steps.gitversion.outputs.SemVer }}" \
             https://api.render.com/deploy/${{ secrets.RENDER_SRV }}
         shell: bash
-
