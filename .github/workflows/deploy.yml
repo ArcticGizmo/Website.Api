@@ -26,5 +26,5 @@ jobs:
         shell: bash
 
       - name: Deploy to Render
-        run: ./build.sh DeployToRender -RenderSrv ${{ secrets.RENDER_SRV }} -REnderSrvKey ${{ secrest.RENDER_SRV_KEY }}
+        run: ./build.sh DeployToRender -RenderSrv ${{ secrets.RENDER_SRV }} -REnderSrvKey ${{ secrets.RENDER_SRV_KEY }}
         shell: bash
