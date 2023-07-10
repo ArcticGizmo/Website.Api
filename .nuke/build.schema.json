@@ -91,7 +91,7 @@
               "Clean",
               "Compile",
               "Default",
-              "Deploy",
+              "DeployToRender",
               "DockerPRBuild",
               "DockerProductionBuild",
               "DockerPush",
@@ -104,10 +104,6 @@
           "type": "string",
           "description": "Path to a solution file that is automatically loaded"
         },
-        "Tag": {
-          "type": "string",
-          "description": "Tag"
-        },
         "Target": {
           "type": "array",
           "description": "List of targets to be invoked. Default is '{default_target}'",
@@ -117,7 +113,7 @@
               "Clean",
               "Compile",
               "Default",
-              "Deploy",
+              "DeployToRender",
               "DockerPRBuild",
               "DockerProductionBuild",
               "DockerPush",

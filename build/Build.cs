@@ -79,11 +79,8 @@ class Build : NukeBuild
     [Parameter("Image Name")]
     public readonly string ImageName = "website-api";
 
-    [Parameter("Tag")]
-    public readonly string? Tag;
-
     const string Repository = "ghcr.io";
-    public string WebsiteApiImageTag => $"{Repository}/arcticgizmo/{ImageName}:{Tag ?? GitVersion.SemVer}";
+    public string WebsiteApiImageTag => $"{Repository}/arcticgizmo/{ImageName}:{GitVersion.SemVer}";
 
     Target DockerProductionBuild => _ => _
         .After(Test)
@@ -118,7 +115,7 @@ class Build : NukeBuild
     [Parameter("Github SRV Key - Key for Service ID")]
     public readonly string RenderSrvKey = string.Empty;
 
-    Target Deploy => _ => _
+    Target DeployToRender => _ => _
         .Requires(() => !string.IsNullOrWhiteSpace(RenderSrv) && !string.IsNullOrWhiteSpace(RenderSrvKey))
         .Executes(async () =>
         {

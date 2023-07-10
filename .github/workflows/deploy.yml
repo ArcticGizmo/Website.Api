@@ -21,38 +21,10 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Install GitVersion
-        uses: gittools/actions/gitversion/setup@v0
-        with:
-          versionSpec: '5.x'
-
-      - name: Determine Version
-        id: gitversion
-        uses: gittools/actions/gitversion/execute@v0
-
       - name: Build and push image to Github Container Registry
-        run: ./build.sh DockerPush -Tag ${{ steps.gitversion.outputs.SemVer }} -ImageName ${{ env.IMAGE_NAME }} -GithubToken ${{ secrets.GITHUB_TOKEN }}
+        run: ./build.sh DockerPush -ImageName ${{ env.IMAGE_NAME }} -GithubToken ${{ secrets.GITHUB_TOKEN }}
         shell: bash
 
-      # - name: Git Version
-      #   id: version
-      #   uses: codacy/git-version@2.8.0
-
-
-
-
-      # - name: Docker meta
-      #   id: meta
-      #   uses: docker/metadata-action@v4
-      #   with:
-      #     tags: |
-      #       type=semver,pattern={{version}}
-      #     images: ${{ env.REGISTRY_NAMESPACE }}/${{ env.IMAGE_NAME }}
-
-      # - name: Deploy
-      #   run: |
-      #     curl -G \
-      #       --data-urlencode "key=${{ secrets.RENDER_SRV_KEY }}" \
-      #       --data-urlencode "imagURL=${{ env.REGISTRY }}/${{ env.REGISTRY_NAMESPACE }}/${{ env.IMAGE_NAME }}:${{ steps.gitversion.outputs.SemVer }}" \
-      #       https://api.render.com/deploy/${{ secrets.RENDER_SRV }}
-      #   shell: bash
+      - name: Deploy to Render
+        run: ./build.sh DeployToRender
+        shell: bash
