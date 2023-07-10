@@ -26,13 +26,12 @@ jobs:
         with:
           versionSpec: '5.x'
 
-
       - name: Determine Version
-        id: version
+        id: gitversion
         uses: gittools/actions/gitversion/execute@v0
 
       - name: Build and push image to Github Container Registry
-        run: ./build.sh DockerPush -ImageName ${{ env.IMAGE_NAME }} -GithubToken ${{ secrets.GITHUB_TOKEN }}
+        run: ./build.sh DockerPush -Tag ${{ steps.gitversion.outputs.SemVer }} -ImageName ${{ env.IMAGE_NAME }} -GithubToken ${{ secrets.GITHUB_TOKEN }}
         shell: bash
 
       # - name: Git Version
