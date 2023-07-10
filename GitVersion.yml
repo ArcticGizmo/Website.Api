@@ -1,5 +1,7 @@
 mode: Mainline
-branches: {}
+branches:
+  main:
+    regex: ^master$|^main$
 ignore:
   sha: []
 merge-message-formats: {}
