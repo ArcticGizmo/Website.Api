@@ -1,7 +1,4 @@
-using System.Collections.Generic;
-using System.Collections.Immutable;
 using Nuke.Common;
-using Nuke.Common.Execution;
 using Nuke.Common.Git;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
@@ -9,11 +6,13 @@ using Nuke.Common.Tooling;
 using Nuke.Common.Tools.Docker;
 using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Tools.GitVersion;
-using Nuke.Common.Tools.Npm;
 using Nuke.Common.Tools.Octopus;
 using Nuke.Common.Utilities.Collections;
 using static Nuke.Common.IO.FileSystemTasks;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
+using System;
+using System.Net.Http;
+using System.Web;
 
 class Build : NukeBuild
 {
@@ -59,12 +58,14 @@ class Build : NukeBuild
 
     Target Test => _ => _
         .DependsOn(Compile)
-        .Executes(() => {
+        .Executes(() =>
+        {
         });
 
     Target DockerPRBuild => _ => _
         .Before(Test)
-        .Executes(() => {
+        .Executes(() =>
+        {
             DockerTasks.DockerBuild(x => x
                 .SetPath(".")
                 .SetFile(Solution.Website_Api.Directory / "Dockerfile")
@@ -75,8 +76,14 @@ class Build : NukeBuild
     [Parameter("Github Token - PAT or Pipeline for writing to ghrc")]
     public readonly string GithubToken = string.Empty;
 
+    [Parameter("Image Name")]
+    public readonly string ImageName = "website-api";
+
+    [Parameter("Tag")]
+    public readonly string? Tag;
+
     const string Repository = "ghcr.io";
-    public string WebsiteApiImageTag => $"{Repository}/arcticgizmo/website-api:{GitVersion.SemVer}";
+    public string WebsiteApiImageTag => $"{Repository}/arcticgizmo/{ImageName}:{Tag ?? GitVersion.SemVer}";
 
     Target DockerProductionBuild => _ => _
         .After(Test)
@@ -91,6 +98,7 @@ class Build : NukeBuild
                 .SetProcessWorkingDirectory(SourceDirectory));
         });
 
+
     Target DockerPush => _ => _
         .DependsOn(DockerProductionBuild)
         .Requires(() => !string.IsNullOrWhiteSpace(GithubToken))
@@ -102,6 +110,28 @@ class Build : NukeBuild
                 .SetPassword(GithubToken));
 
             DockerTasks.DockerPush(x => x.SetName(WebsiteApiImageTag));
+        });
+
+    [Parameter("Render SRV - Service ID")]
+
+    public readonly string RenderSrv = string.Empty;
+    [Parameter("Github SRV Key - Key for Service ID")]
+    public readonly string RenderSrvKey = string.Empty;
+
+    Target Deploy => _ => _
+        .Requires(() => !string.IsNullOrWhiteSpace(RenderSrv) && !string.IsNullOrWhiteSpace(RenderSrvKey))
+        .Executes(async () =>
+        {
+            var client = new HttpClient();
+
+            var builder = new UriBuilder($"https://api.render.com/deploy/{RenderSrv}");
+            var query = HttpUtility.ParseQueryString(builder.Query);
+            query["key"] = RenderSrvKey;
+            query["imgURL"] = WebsiteApiImageTag;
+            builder.Query = query.ToString();
+            var url = builder.ToString();
+
+            await client.GetAsync(url);
         });
 
     Target Default => _ => _
