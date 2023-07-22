@@ -98,15 +98,14 @@ builder.Services.AddOpenFgaMiddleware(config =>
 
 builder.Services.AddAuthorization(options =>
     {
-        options.FallbackPolicy = new AuthorizationPolicyBuilder()
-            .RequireAuthenticatedUser()
-            .Build();
-
         options.AddPolicy(FgaAuthorizationDefaults.PolicyKey, p => p.RequireAuthenticatedUser().AddFgaRequirement());
 
         foreach (var scope in WbesiteScopes.All())
         {
-            options.AddPolicy(scope, p => p.Requirements.Add(new ScopeAuthorizationRequirement(scope, domain)));
+            options.AddPolicy(scope, p => p
+                .RequireAuthenticatedUser()
+                .Requirements
+                .Add(new ScopeAuthorizationRequirement(scope, domain)));
         }
     });
 
@@ -130,7 +129,7 @@ else
 app.UseCors();
 
 
-app.MapHealthChecks("/healthz");
+app.MapHealthChecks("/healthz").AllowAnonymous();
 
 app.UseAuthentication();
 app.UseAuthorization();
