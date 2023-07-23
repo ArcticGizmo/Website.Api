@@ -20,7 +20,7 @@ public class ConfigurationController : ControllerBase
     [AllowAnonymous]
     public string Get()
     {
-        var a = _config["RENDER_EXTERNAL_URL"];
+        var a = _config["ClientUrl"];
         return a ?? "not set";
     }
 
