@@ -17,9 +17,10 @@ public class ConfigurationController : ControllerBase
     }
 
     [HttpGet]
+    [AllowAnonymous]
     public string Get()
     {
-        var a = _config["ConnectionStrings:MongoDB"];
+        var a = _config["RENDER_EXTERNAL_URL"];
         return a ?? "not set";
     }
 
