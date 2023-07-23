@@ -51,7 +51,7 @@ builder.Services.AddCors(options =>
                 {
                     corsBuilder
                         .SetIsOriginAllowedToAllowWildcardSubdomains()
-                        .WithOrigins(builder.Configuration["RENDER_EXTERNAL_URL"]!);
+                        .WithOrigins(builder.Configuration["ClientUrl"]!);
                 }
                 else
                 {
