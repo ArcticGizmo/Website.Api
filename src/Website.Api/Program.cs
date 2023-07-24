@@ -7,6 +7,7 @@ using Fga.Net.DependencyInjection;
 using Fga.Net.AspNetCore;
 using Fga.Net.AspNetCore.Authorization;
 using Website.Api.Authorization;
+using Website.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -110,6 +111,7 @@ builder.Services.AddAuthorization(options =>
     });
 
 builder.Services.AddSingleton<IAuthorizationHandler, ScopeAuthorizationHandler>();
+builder.Services.AddSingleton<IAuth0ManagementApi, Auth0ManagementApi>();
 
 builder.Services.AddHealthChecks();
 

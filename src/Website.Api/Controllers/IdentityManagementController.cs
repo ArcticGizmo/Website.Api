@@ -4,26 +4,31 @@ using Fga.Net.AspNetCore.Authorization;
 using Fga.Net.AspNetCore.Authorization.Attributes;
 using Website.Api.Authorization;
 using OpenFga.Sdk.Client;
+using Website.Api.Services;
+using Auth0.ManagementApi.Paging;
+using Auth0.ManagementApi.Models;
 
 namespace Website.Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-[Authorize(WbesiteScopes.ManageIdentity)]
-[Authorize(FgaAuthorizationDefaults.PolicyKey)]
-[FgaRole(FgaRoles.Admin)]
+//[Authorize(WbesiteScopes.ManageIdentity)]
+//[Authorize(FgaAuthorizationDefaults.PolicyKey)]
+//[FgaRole(FgaRoles.Admin)]
 public class IdentityManagementController : ControllerBase
 {
     private readonly OpenFgaClient _fga;
-    public IdentityManagementController(OpenFgaClient fga)
+    private readonly IAuth0ManagementApi _management;
+    public IdentityManagementController(OpenFgaClient fga, IAuth0ManagementApi management)
     {
         _fga = fga;
+        _management = management;
     }
 
     [HttpGet("users")]
-    public async Task GetUsers()
+    public async Task<IPagedList<User>> GetUsers()
     {
-        Console.WriteLine("get all users");
+        return await _management.GetUsers();
     }
 
     [HttpGet("users/{id}")]
