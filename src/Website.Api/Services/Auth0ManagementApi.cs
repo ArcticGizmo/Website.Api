@@ -12,8 +12,10 @@ public class Auth0ManagementApi : IAuth0ManagementApi
     private readonly Uri _endpoint;
     private readonly string _token_endpoint;
     private readonly IHttpClientFactory _httpClientFactory;
+    private readonly string _managementClientId;
+    private readonly string _managementClientSecret;
+    private readonly string _orgId;
     private readonly string _clientId;
-    private readonly string _clientSecret;
 
     private ManagementApiClient _client;
     private DateTime _refreshAfter = DateTime.MinValue;
@@ -21,8 +23,10 @@ public class Auth0ManagementApi : IAuth0ManagementApi
     public Auth0ManagementApi(IConfiguration config, IHttpClientFactory httpClientFactory)
     {
         _httpClientFactory = httpClientFactory;
-        _clientId = config["Auth0Management:ClientId"] ?? throw new ArgumentNullException("clientId");
-        _clientSecret = config["Auth0Management:ClientSecret"] ?? throw new ArgumentNullException("clientSecret");
+        _managementClientId = config["Auth0Management:ClientId"] ?? throw new ArgumentNullException("managementClientId");
+        _managementClientSecret = config["Auth0Management:ClientSecret"] ?? throw new ArgumentNullException("managementClientSecret");
+        _orgId = config["Auth0:OrgId"] ?? throw new ArgumentNullException("orgId");
+        _clientId = config["Auth0:ClientId"] ?? throw new ArgumentNullException("clientId");
 
         var domain = config["Auth0:Domain"];
         _token_endpoint = $"https://{domain}/oauth/token";
@@ -50,8 +54,8 @@ public class Auth0ManagementApi : IAuth0ManagementApi
         client.DefaultRequestHeaders.TryAddWithoutValidation("content-type", "application/json");
         using var jsonContent = JsonContent.Create(new
         {
-            client_id = _clientId,
-            client_secret = _clientSecret,
+            client_id = _managementClientId,
+            client_secret = _managementClientSecret,
             audience = _endpoint.ToString(),
             grant_type = "client_credentials"
         });
@@ -72,12 +76,19 @@ public class Auth0ManagementApi : IAuth0ManagementApi
     public async Task<IPagedList<User>> GetUsers()
     {
         var client = await GetClient();
-        var users = await client.Users.GetAllAsync(new GetUsersRequest(), new PaginationInfo());
-        return users;
+        return await client.Users.GetAllAsync(new GetUsersRequest(), new PaginationInfo());
     }
 
-    public Task InviteUser(string email)
+    public async Task<OrganizationInvitation> InviteUser(string email)
     {
-        throw new NotImplementedException();
+
+        var client = await GetClient();
+        var req = new OrganizationCreateInvitationRequest()
+        {
+            Inviter = new OrganizationInvitationInviter { Name = "Duck Gang Admin" },
+            Invitee = new OrganizationInvitationInvitee { Email = email },
+            ClientId = _clientId,
+        };
+        return await client.Organizations.CreateInvitationAsync(_orgId, req);
     }
 }

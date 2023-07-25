@@ -47,11 +47,7 @@ public class IdentityManagementController : ControllerBase
     }
 
     [HttpPost("invite-user")]
-    public async Task InviteUser()
-    {
-        // I think we will need to switch to organization flows to restrict users logging in
-        Console.WriteLine("Invite User");
-    }
+    public async Task<OrganizationInvitation> InviteUser(string email) => await _management.InviteUser(email);
 
     [HttpPost("remove-user")]
     public async Task RemoveUser()

@@ -105,8 +105,9 @@ builder.Services.AddAuthorization(options =>
         {
             options.AddPolicy(scope, p => p
                 .RequireAuthenticatedUser()
-                .Requirements
-                .Add(new ScopeAuthorizationRequirement(scope, domain)));
+                .AddRequirements(new ScopeAuthorizationRequirement(scope, domain))
+                .RequireClaim("org_id", builder.Configuration["Auth0:OrgId"]!)
+            );
         }
     });
 

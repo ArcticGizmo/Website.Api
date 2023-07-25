@@ -9,7 +9,7 @@ public interface IAuth0ManagementApi
     public Task GetUser(string userId);
     public Task<IPagedList<User>> GetUsers();
 
-    public Task InviteUser(string email);
+    public Task<OrganizationInvitation> InviteUser(string email);
 
     public Task DeleteUser(string userId);
 }
