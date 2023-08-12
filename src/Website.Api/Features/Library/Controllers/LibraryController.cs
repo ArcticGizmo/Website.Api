@@ -8,6 +8,7 @@ namespace Website.Api.Features.Library.Controllers;
 
 [ApiController]
 [Route("[controller]")]
+[Authorize]
 public class LibraryController : ControllerBase
 {
     private readonly ILibraryService _library;
