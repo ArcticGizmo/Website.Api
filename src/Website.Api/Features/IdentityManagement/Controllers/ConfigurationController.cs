@@ -4,7 +4,7 @@ using Fga.Net.AspNetCore.Authorization;
 using Fga.Net.AspNetCore.Authorization.Attributes;
 using Website.Api.Authorization;
 
-namespace Website.Api.Controllers;
+namespace Website.Api.Features.IdentityManagement.Controllers;
 
 [ApiController]
 [Route("[controller]")]

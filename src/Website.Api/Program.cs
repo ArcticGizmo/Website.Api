@@ -7,6 +7,8 @@ using Fga.Net.DependencyInjection;
 using Fga.Net.AspNetCore;
 using Fga.Net.AspNetCore.Authorization;
 using Website.Api.Authorization;
+using Website.Api.Features.IdentityManagement;
+using Website.Api.Features.Library.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -104,12 +106,17 @@ builder.Services.AddAuthorization(options =>
         {
             options.AddPolicy(scope, p => p
                 .RequireAuthenticatedUser()
-                .Requirements
-                .Add(new ScopeAuthorizationRequirement(scope, domain)));
+                .AddRequirements(new ScopeAuthorizationRequirement(scope, domain))
+                .RequireClaim("org_id", builder.Configuration["Auth0:OrgId"]!)
+            );
         }
     });
 
 builder.Services.AddSingleton<IAuthorizationHandler, ScopeAuthorizationHandler>();
+builder.Services.AddSingleton<IAuth0ManagementApi, Auth0ManagementApi>();
+
+builder.Services.Configure<LibraryDatabaseConfig>(builder.Configuration.GetSection("LibraryDatabase"));
+builder.Services.AddSingleton<ILibraryService, LibraryService>();
 
 builder.Services.AddHealthChecks();
 

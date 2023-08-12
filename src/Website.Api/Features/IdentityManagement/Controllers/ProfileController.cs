@@ -1,18 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using Fga.Net.AspNetCore.Authorization;
-using Fga.Net.AspNetCore.Authorization.Attributes;
-using Website.Api.Authorization;
 using OpenFga.Sdk.Client;
-using OpenFga.Sdk.Model;
 using OpenFga.Sdk.Client.Model;
-using Website.Api.Models;
 using System.Security.Claims;
 using Microsoft.Net.Http.Headers;
-using System.Threading.RateLimiting;
 using System.Data;
+using Website.Api.Features.IdentityManagement.Models;
 
-namespace Website.Api.Controllers;
+namespace Website.Api.Features.IdentityManagement.Controllers;
 
 [ApiController]
 [Route("[controller]")]
