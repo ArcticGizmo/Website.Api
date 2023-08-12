@@ -1,4 +1,4 @@
-namespace Website.Api.Models;
+namespace Website.Api.Features.IdentityManagement.Models;
 
 public class UserInfo
 {
