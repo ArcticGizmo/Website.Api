@@ -51,6 +51,13 @@ public class LibraryController : ControllerBase
         return Ok(new GetLibraryRes(library, books));
     }
 
+    [HttpPut("{id}")]
+    public async Task UpdateLibrary(string id, LibraryDefinition def)
+    {
+        def.Id = id;
+        await _library.UpdateLibrary(id, def);
+    }
+
     [HttpDelete("{id}")]
     public async Task DeleteLibrary(string id)
     {

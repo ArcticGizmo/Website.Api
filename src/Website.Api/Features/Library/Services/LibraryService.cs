@@ -38,6 +38,17 @@ public class LibraryService : ILibraryService
         return item?.ToLibraryDefinition();
     }
 
+    public async Task UpdateLibrary(string libraryId, LibraryDefinition library)
+    {
+        // is this atomic? No, but it sure is easier
+        var doc = await _libraryCollection.Find(x => x.Id == libraryId).FirstAsync();
+
+        doc.Name = library.Name;
+
+        await _libraryCollection.ReplaceOneAsync(x => x.Id == libraryId, doc);
+    }
+
+
     public async Task<LibraryDefinition> CreateLibrary(LibraryDefinition library)
     {
         var doc = new LibraryDocument { Name = library.Name, OwnerUserId = library.OwnerUserId };

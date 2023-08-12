@@ -10,6 +10,8 @@ public interface ILibraryService
 
     public Task<LibraryDefinition> CreateLibrary(LibraryDefinition library);
 
+    public Task UpdateLibrary(string libraryId, LibraryDefinition library);
+
     public Task DeleteLibrary(string id);
 
     public Task<IList<Book>> GetBooks(string libraryId, string? searchText = null);
