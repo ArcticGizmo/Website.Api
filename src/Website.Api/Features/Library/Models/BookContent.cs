@@ -9,11 +9,13 @@ public class BookContent
 
     public string? Series { get; set; }
 
-    public int? BookInSeries { get; set; }
+    public float? BookInSeries { get; set; }
 
     public List<string> Tags { get; set; } = new();
 
     public float? Rating { get; set; }
 
     public string? CoverImageUrl { get; set; }
+
+    public int? PageCount { get; set; }
 }

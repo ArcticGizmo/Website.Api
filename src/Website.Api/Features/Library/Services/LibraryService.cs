@@ -111,7 +111,8 @@ public class LibraryService : ILibraryService
             BookInSeries = content.BookInSeries,
             Tags = content.Tags,
             Rating = content.Rating,
-            CoverImageUrl = content.CoverImageUrl
+            CoverImageUrl = content.CoverImageUrl,
+            PageCount = content.PageCount,
         };
         await _booksCollection.InsertOneAsync(doc);
         return doc.ToBook();
@@ -129,6 +130,7 @@ public class LibraryService : ILibraryService
         doc.Tags = content.Tags;
         doc.Rating = content.Rating;
         doc.CoverImageUrl = content.CoverImageUrl;
+        doc.PageCount = content.PageCount;
 
         await _booksCollection.ReplaceOneAsync(x => x.Id == bookId, doc);
     }
@@ -164,7 +166,8 @@ internal static class Extensions
                 Series = doc.Series,
                 Tags = doc.Tags,
                 Rating = doc.Rating,
-                CoverImageUrl = doc.CoverImageUrl
+                CoverImageUrl = doc.CoverImageUrl,
+                PageCount = doc.PageCount
             }
         };
     }

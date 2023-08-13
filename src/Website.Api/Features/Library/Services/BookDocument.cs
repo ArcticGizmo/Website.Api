@@ -23,12 +23,15 @@ public class BookDocument
 
     public required List<string> Authors { get; set; } = new();
 
+    [BsonElement("pageCount")]
+    public int? PageCount { get; set; }
+
     [BsonElement("series")]
 
     public string? Series { get; set; }
 
     [BsonElement("bookInSeries")]
-    public int? BookInSeries { get; set; }
+    public float? BookInSeries { get; set; }
 
     [BsonElement("tags")]
 
@@ -39,7 +42,7 @@ public class BookDocument
     public float? Rating { get; set; }
 
     [BsonElement("coverImageUrl")]
-    public string? CoverImageUrl {get; set;}
+    public string? CoverImageUrl { get; set; }
 }
 
 public class BookSeriesDocument
