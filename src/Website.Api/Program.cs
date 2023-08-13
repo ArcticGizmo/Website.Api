@@ -126,11 +126,7 @@ app.UseSwagger();
 app.UseSwaggerUI();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-
-}
-else
+if (!app.Environment.IsDevelopment())
 {
     app.UseHttpsRedirection();
 }
