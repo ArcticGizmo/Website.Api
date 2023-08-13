@@ -58,11 +58,11 @@ public class LibraryController : ControllerBase
         await _library.UpdateLibrary(id, def);
     }
 
-    [HttpDelete("{id}")]
-    public async Task DeleteLibrary(string id)
-    {
-        await _library.DeleteLibrary(id);
-    }
+    // [HttpDelete("{id}")]
+    // public async Task DeleteLibrary(string id)
+    // {
+    //     await _library.DeleteLibrary(id);
+    // }
 }
 
 public record CreateLibraryReq(string Name);

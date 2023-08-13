@@ -12,6 +12,11 @@ using Website.Api.Features.Library.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.WebHost.UseSentry(c =>
+{
+    c.TracesSampleRate = 1.0;
+});
+
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -124,6 +129,7 @@ var app = builder.Build();
 
 app.UseSwagger();
 app.UseSwaggerUI();
+app.UseSentryTracing();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
