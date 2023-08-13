@@ -18,4 +18,10 @@ public class BookContent
     public string? CoverImageUrl { get; set; }
 
     public int? PageCount { get; set; }
+
+    public string? Notes { get; set; }
+
+    public bool Read { get; set; } = true;
+
+    public bool Wishlist { get; set; } = false;
 }

@@ -43,15 +43,13 @@ public class BookDocument
 
     [BsonElement("coverImageUrl")]
     public string? CoverImageUrl { get; set; }
-}
 
-public class BookSeriesDocument
-{
-    [BsonElement("name")]
+    [BsonElement("notes")]
+    public string? Notes { get; set; }
 
-    public required string Name { get; set; }
+    [BsonElement("read")]
+    public bool Read { get; set; } = true;
 
-    [BsonElement("bookInSeries")]
-
-    public required int BookInSeries { get; set; }
+    [BsonElement("wishlist")]
+    public bool Wishlist { get; set; } = false;
 }

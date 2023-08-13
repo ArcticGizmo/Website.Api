@@ -113,6 +113,9 @@ public class LibraryService : ILibraryService
             Rating = content.Rating,
             CoverImageUrl = content.CoverImageUrl,
             PageCount = content.PageCount,
+            Notes = content.Notes,
+            Read = content.Read,
+            Wishlist = content.Wishlist,
         };
         await _booksCollection.InsertOneAsync(doc);
         return doc.ToBook();
@@ -131,6 +134,9 @@ public class LibraryService : ILibraryService
         doc.Rating = content.Rating;
         doc.CoverImageUrl = content.CoverImageUrl;
         doc.PageCount = content.PageCount;
+        doc.Notes = content.Notes;
+        doc.Read = content.Read;
+        doc.Wishlist = content.Wishlist;
 
         await _booksCollection.ReplaceOneAsync(x => x.Id == bookId, doc);
     }
@@ -167,7 +173,10 @@ internal static class Extensions
                 Tags = doc.Tags,
                 Rating = doc.Rating,
                 CoverImageUrl = doc.CoverImageUrl,
-                PageCount = doc.PageCount
+                PageCount = doc.PageCount,
+                Notes = doc.Notes,
+                Read = doc.Read,
+                Wishlist = doc.Wishlist,
             }
         };
     }
