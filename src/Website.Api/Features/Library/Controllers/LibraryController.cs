@@ -40,15 +40,12 @@ public class LibraryController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetLibrary(string id, [FromQuery] string? searchText = null)
+    public async Task<IActionResult> GetLibrary(string id)
     {
         var library = await _library.GetLibrary(id);
         if (library == null)
             return NotFound();
-
-        var books = await _library.GetBooks(id, searchText);
-
-        return Ok(new GetLibraryRes(library, books));
+        return Ok(library);
     }
 
     [HttpPut("{id}")]
@@ -63,6 +60,12 @@ public class LibraryController : ControllerBase
     // {
     //     await _library.DeleteLibrary(id);
     // }
+
+    [HttpGet("{libraryId}/books")]
+    public async Task<IList<Book>> GetBooks(string libraryId, [FromQuery] BookQueryOptions opts)
+    {
+        return await _library.GetBooks(libraryId, opts);
+    }
 }
 
 public record CreateLibraryReq(string Name);

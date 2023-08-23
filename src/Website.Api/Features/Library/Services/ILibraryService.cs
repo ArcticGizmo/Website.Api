@@ -14,7 +14,7 @@ public interface ILibraryService
 
     public Task DeleteLibrary(string id);
 
-    public Task<IList<Book>> GetBooks(string libraryId, string? searchText = null);
+    public Task<IList<Book>> GetBooks(string libraryId, BookQueryOptions? opts = null);
 
     public Task<Book?> GetBook(string bookId);
 

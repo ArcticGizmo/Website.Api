@@ -10,6 +10,8 @@ public class LibraryService : ILibraryService
     const string LibraryCollection = "Libraries";
     const string BookCollection = "Books";
 
+    private static Collation CollationEn = new Collation("en", strength: CollationStrength.Primary);
+
     private readonly IMongoDatabase _db;
     private readonly IMongoCollection<LibraryDocument> _libraryCollection;
     private readonly IMongoCollection<BookDocument> _booksCollection;
@@ -63,25 +65,27 @@ public class LibraryService : ILibraryService
         await _libraryCollection.DeleteOneAsync(x => x.Id == libraryId);
     }
 
-    public async Task<IList<Book>> GetBooks(string libraryId, string? searchText = null)
+    public async Task<IList<Book>> GetBooks(string libraryId, BookQueryOptions? opts = null)
     {
         ObjectId id;
         if (!ObjectId.TryParse(libraryId, out id))
             return new List<Book>();
 
-        IList<BookDocument> documents;
+        IFindFluent<BookDocument, BookDocument> query;
 
-        if (string.IsNullOrWhiteSpace(searchText))
+        if (string.IsNullOrWhiteSpace(opts?.SearchText))
         {
-            documents = await _booksCollection.Find(x => x.LibraryId == libraryId).ToListAsync();
+            query = _booksCollection.Find(x => x.LibraryId == libraryId, new FindOptions { Collation = CollationEn });
         }
         else
         {
-            var filter = GetBookTextFilter(id, searchText);
-            documents = await _booksCollection.Find(filter).Limit(20).ToListAsync();
+            var filter = GetBookTextFilter(id, opts.SearchText);
+            query = _booksCollection.Find(filter, new FindOptions { Collation = CollationEn });
         }
 
-        return documents.Select(d => d.ToBook()).ToList();
+
+        var items = (await query.SortBy(opts).Paged(opts).ToListAsync());
+        return items.Select(d => d.ToBook()).ToList();
     }
 
     private FilterDefinition<BookDocument> GetBookTextFilter(ObjectId libraryId, string searchText)
@@ -180,5 +184,31 @@ internal static class Extensions
             }
         };
     }
+
+    public static IFindFluent<T, T> Paged<T>(this IFindFluent<T, T> query, IPagedQueryOptions? opts)
+    {
+        if (opts is null)
+            return query;
+        return query.Skip(opts.PageNumber * opts.PageSize).Limit(opts.PageSize);
+    }
+
+    public static IFindFluent<T, T> SortBy<T>(this IFindFluent<T, T> query, ISortable? opts)
+    {
+        if (opts is null || string.IsNullOrEmpty(opts.SortBy))
+            return query;
+
+        if (opts.SortDecending == true)
+        {
+            var sorter = Builders<T>.Sort.Descending(opts.SortBy);
+            return query.Sort(sorter);
+        }
+        else
+        {
+            var sorter = Builders<T>.Sort.Ascending(opts.SortBy);
+            return query.Sort(sorter);
+        }
+    }
+
+
 }
 
