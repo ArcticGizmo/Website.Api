@@ -1,4 +1,4 @@
-namespace Website.Api.Features.Library.Models;
+namespace Website.Api.Common;
 
 public interface IPagedQueryOptions
 {

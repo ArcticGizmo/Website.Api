@@ -9,6 +9,7 @@ using Fga.Net.AspNetCore.Authorization;
 using Website.Api.Authorization;
 using Website.Api.Features.IdentityManagement;
 using Website.Api.Features.Library.Services;
+using Website.Api.Features.Recipes.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -121,7 +122,10 @@ builder.Services.AddSingleton<IAuthorizationHandler, ScopeAuthorizationHandler>(
 builder.Services.AddSingleton<IAuth0ManagementApi, Auth0ManagementApi>();
 
 builder.Services.Configure<LibraryDatabaseConfig>(builder.Configuration.GetSection("LibraryDatabase"));
+builder.Services.Configure<RecipeDatabaseConfig>(builder.Configuration.GetSection("RecipeDatabase"));
+
 builder.Services.AddSingleton<ILibraryService, LibraryService>();
+builder.Services.AddSingleton<IRecipeService, RecipeService>();
 
 builder.Services.AddHealthChecks();
 

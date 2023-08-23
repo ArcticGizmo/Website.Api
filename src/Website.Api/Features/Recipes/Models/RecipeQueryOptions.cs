@@ -1,8 +1,8 @@
 using Website.Api.Common;
 
-namespace Website.Api.Features.Library.Models;
+namespace Website.Api.Features.Recipes.Models;
 
-public class BookQueryOptions : ITextQueryOptions, IPagedQueryOptions, ISortable
+public class RecipeQueryOptions : ITextQueryOptions, IPagedQueryOptions, ISortable
 {
     public string? SearchText { get; init; }
 

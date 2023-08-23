@@ -19,8 +19,7 @@ public class BooksController : ControllerBase
     [HttpPost]
     public async Task<Book> CreateBook(CreateBookReq req)
     {
-        var book = await _library.CreateBook(req.LibraryId, req.Content);
-        return book;
+        return await _library.CreateBook(req.LibraryId, req.Content);
     }
 
     [HttpGet("{id}")]
@@ -40,8 +39,8 @@ public class BooksController : ControllerBase
         await _library.UpdateBook(id, content);
     }
 
-    [HttpDelete("{id}")]
-    public async Task DeleteBook(string id) => await _library.DeleteBook(id);
+    // [HttpDelete("{id}")]
+    // public async Task DeleteBook(string id) => await _library.DeleteBook(id);
 }
 
 public record CreateBookReq(string LibraryId, BookContent Content);
