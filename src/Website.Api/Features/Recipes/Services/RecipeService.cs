@@ -81,8 +81,12 @@ public class RecipeService : IRecipeService
     {
         var doc = await _recipeCollection.Find(x => x.Id == recipeId).FirstAsync();
         doc.Name = content.Name;
+        doc.ImageUrl = content.ImageUrl;
+        doc.Tags = content.Tags;
+        doc.Ingredients = content.Ingredients;
         doc.Steps = content.Steps.Select(s => s.ToStepDocument()).ToList();
-        throw new NotImplementedException();
+
+        await _recipeCollection.ReplaceOneAsync(x => x.Id == recipeId, doc);
     }
 }
 
