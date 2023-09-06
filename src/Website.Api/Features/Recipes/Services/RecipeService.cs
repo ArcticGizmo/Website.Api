@@ -110,7 +110,7 @@ internal static class Extensions
         return new RecipeStepDocument
         {
             Text = step.Text,
-            ImageUrl = step.ImageUrl
+            ImageUrls = step.ImageUrls
         };
     }
 
@@ -119,7 +119,7 @@ internal static class Extensions
         return new RecipeStep
         {
             Text = step.Text,
-            ImageUrl = step.ImageUrl
+            ImageUrls = step.ImageUrls
         };
     }
 }
