@@ -15,4 +15,3 @@ public class RecipeContent
 
     public List<RecipeStep> Steps { get; set; } = new();
 }
-
