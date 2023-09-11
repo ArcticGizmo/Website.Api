@@ -1,3 +1,4 @@
+using Website.Api.Common;
 using Website.Api.Features.Library.Models;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
@@ -16,7 +17,7 @@ public class LibraryService : ILibraryService
     private readonly IMongoCollection<LibraryDocument> _libraryCollection;
     private readonly IMongoCollection<BookDocument> _booksCollection;
 
-    public LibraryService(ILogger<LibraryService> logger, IOptions<LibraryDatabaseConfig> libraryDatabaseConfig)
+    public LibraryService(IOptions<LibraryDatabaseConfig> libraryDatabaseConfig)
     {
         var client = new MongoClient(libraryDatabaseConfig.Value.ConnectionString);
 
@@ -84,7 +85,7 @@ public class LibraryService : ILibraryService
         }
 
 
-        var items = (await query.SortBy(opts).Paged(opts).ToListAsync());
+        var items = await query.SortBy(opts).Paged(opts).ToListAsync();
         return items.Select(d => d.ToBook()).ToList();
     }
 
@@ -184,31 +185,5 @@ internal static class Extensions
             }
         };
     }
-
-    public static IFindFluent<T, T> Paged<T>(this IFindFluent<T, T> query, IPagedQueryOptions? opts)
-    {
-        if (opts is null)
-            return query;
-        return query.Skip(opts.PageNumber * opts.PageSize).Limit(opts.PageSize);
-    }
-
-    public static IFindFluent<T, T> SortBy<T>(this IFindFluent<T, T> query, ISortable? opts)
-    {
-        if (opts is null || string.IsNullOrEmpty(opts.SortBy))
-            return query;
-
-        if (opts.SortDecending == true)
-        {
-            var sorter = Builders<T>.Sort.Descending(opts.SortBy);
-            return query.Sort(sorter);
-        }
-        else
-        {
-            var sorter = Builders<T>.Sort.Ascending(opts.SortBy);
-            return query.Sort(sorter);
-        }
-    }
-
-
 }
 
