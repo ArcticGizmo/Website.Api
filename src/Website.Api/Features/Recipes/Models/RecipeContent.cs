@@ -7,6 +7,10 @@ public class RecipeContent
     public string? ImageUrl { get; set; }
     public List<string> Tags { get; set; } = new();
 
+    public int PeopleCount { get; set; }
+
+    public TimeComponent Time { get; set; } = new();
+
     public List<string> Ingredients { get; set; } = new();
 
     public List<RecipeStep> Steps { get; set; } = new();

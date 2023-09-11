@@ -13,9 +13,14 @@ public class RecipeDocument
 
     public string? ImageUrl { get; set; }
 
+    public int PeopleCount { get; set; }
+
+    public TimeComponent Time { get; set; } = new TimeComponent();
+
     public List<string> Tags { get; set; } = new();
 
     public List<string> Ingredients { get; set; } = new();
 
     public List<RecipeStepDocument> Steps { get; set; } = new();
 }
+

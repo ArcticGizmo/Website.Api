@@ -4,7 +4,6 @@ using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using MongoDB.Bson;
 
-
 namespace Website.Api.Features.Recipes.Services;
 
 public class RecipeService : IRecipeService
@@ -68,6 +67,8 @@ public class RecipeService : IRecipeService
         {
             Name = content.Name,
             ImageUrl = content.ImageUrl,
+            Time = content.Time,
+            PeopleCount = content.PeopleCount,
             Tags = content.Tags,
             Steps = steps
         };
@@ -82,6 +83,8 @@ public class RecipeService : IRecipeService
         var doc = await _recipeCollection.Find(x => x.Id == recipeId).FirstAsync();
         doc.Name = content.Name;
         doc.ImageUrl = content.ImageUrl;
+        doc.Time = content.Time;
+        doc.PeopleCount = content.PeopleCount;
         doc.Tags = content.Tags;
         doc.Ingredients = content.Ingredients;
         doc.Steps = content.Steps.Select(s => s.ToStepDocument()).ToList();
@@ -102,6 +105,8 @@ internal static class Extensions
             {
                 Name = doc.Name,
                 ImageUrl = doc.ImageUrl,
+                PeopleCount = doc.PeopleCount,
+                Time = doc.Time,
                 Tags = doc.Tags,
                 Steps = doc.Steps.Select(s => s.ToStep()).ToList()
             }
