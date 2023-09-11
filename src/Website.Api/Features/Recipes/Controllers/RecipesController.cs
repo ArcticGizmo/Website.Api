@@ -43,4 +43,7 @@ public class RecipesController : ControllerBase
     {
         await _recipe.UpdateRecipe(id, content);
     }
+
+    [HttpDelete("{id}")]
+    public async Task DeleteRecipe(string id) => await _recipe.DeleteRecipe(id);
 }

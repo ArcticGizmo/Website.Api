@@ -11,4 +11,7 @@ public interface IRecipeService
     public Task<Recipe> CreateRecipe(RecipeContent content);
 
     public Task UpdateRecipe(string recipeId, RecipeContent content);
+
+    public Task DeleteRecipe(string recipeId);
+
 }

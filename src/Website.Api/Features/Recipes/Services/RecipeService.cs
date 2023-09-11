@@ -69,6 +69,7 @@ public class RecipeService : IRecipeService
             ImageUrl = content.ImageUrl,
             Time = content.Time,
             PeopleCount = content.PeopleCount,
+            Ingredients = content.Ingredients,
             Tags = content.Tags,
             Steps = steps
         };
@@ -91,6 +92,9 @@ public class RecipeService : IRecipeService
 
         await _recipeCollection.ReplaceOneAsync(x => x.Id == recipeId, doc);
     }
+
+    public async Task DeleteRecipe(string recipeId) => await _recipeCollection.DeleteOneAsync(x => x.Id == recipeId);
+
 }
 
 
@@ -106,6 +110,7 @@ internal static class Extensions
                 Name = doc.Name,
                 ImageUrl = doc.ImageUrl,
                 PeopleCount = doc.PeopleCount,
+                Ingredients = doc.Ingredients,
                 Time = doc.Time,
                 Tags = doc.Tags,
                 Steps = doc.Steps.Select(s => s.ToStep()).ToList()
