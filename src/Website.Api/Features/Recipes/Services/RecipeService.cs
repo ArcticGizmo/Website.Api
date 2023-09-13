@@ -10,7 +10,7 @@ public class RecipeService : IRecipeService
 {
     const string RecipeCollection = "Recipes";
 
-    private static Collation CollationEn = new Collation("en", strength: CollationStrength.Primary);
+    private static Collation CollationEn = new("en", strength: CollationStrength.Primary);
     private readonly IMongoDatabase _db;
     private readonly IMongoCollection<RecipeDocument> _recipeCollection;
 
@@ -23,11 +23,11 @@ public class RecipeService : IRecipeService
         _recipeCollection = _db.GetCollection<RecipeDocument>(RecipeCollection);
     }
 
-    public async Task<IList<Recipe>> GetRecipes(RecipeQueryOptions? opts = null)
+    public async Task<PagedData<Recipe>> GetRecipes(RecipeQueryOptions opts)
     {
         IFindFluent<RecipeDocument, RecipeDocument> query;
 
-        if (string.IsNullOrWhiteSpace(opts?.SearchText))
+        if (string.IsNullOrWhiteSpace(opts.SearchText))
         {
             query = _recipeCollection.Find(_ => true, new FindOptions { Collation = CollationEn });
         }
@@ -38,8 +38,11 @@ public class RecipeService : IRecipeService
         }
 
 
-        var items = await query.SortBy(opts).Paged(opts).ToListAsync();
-        return items.Select(d => d.ToRecipe()).ToList();
+        var rawItems = await query.SortBy(opts).Paged(opts).ToListAsync();
+        var items = rawItems.Select(d => d.ToRecipe()).ToList();
+
+        var nextPage = items.Count < opts.PageSize ? 0 : opts.PageNumber + 1;
+        return new PagedData<Recipe>(items, opts.PageNumber, opts.PageSize, nextPage);
     }
 
     private FilterDefinition<RecipeDocument> GetRecipeTextFilter(string searchText)
