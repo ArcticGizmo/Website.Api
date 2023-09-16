@@ -40,10 +40,8 @@ public class RecipesController : ControllerBase
     [HttpGet]
     public async Task<PagedData<Recipe>> GetRecipes([FromQuery] RecipeQueryOptions opts)
     {
-        Console.WriteLine(opts.PageNumber);
-        Console.WriteLine(opts.PageSize);
         var data = _local.Skip(opts.PageSize * opts.PageNumber).Take(opts.PageSize).ToList();
-        var nextPage = data.Count() < opts.PageSize ? 0 : opts.PageNumber + 1;
+        int? nextPage = data.Count() < opts.PageSize ? null : opts.PageNumber + 1;
         return new PagedData<Recipe>(data, opts.PageNumber, opts.PageSize, nextPage);
     }
 
