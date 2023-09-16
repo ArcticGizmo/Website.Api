@@ -3,6 +3,7 @@ using Website.Api.Features.Recipes.Models;
 
 using Microsoft.AspNetCore.Authorization;
 using Website.Api.Features.Recipes.Services;
+using Website.Api.Common;
 
 namespace Website.Api.Features.Recipes.Controllers;
 
@@ -18,7 +19,7 @@ public class RecipesController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IList<Recipe>> GetBooks([FromQuery] RecipeQueryOptions opts)
+    public async Task<PagedData<Recipe>> GetRecipes([FromQuery] RecipeQueryOptions opts)
     {
         return await _recipe.GetRecipes(opts);
     }

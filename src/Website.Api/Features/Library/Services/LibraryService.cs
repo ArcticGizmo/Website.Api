@@ -66,15 +66,15 @@ public class LibraryService : ILibraryService
         await _libraryCollection.DeleteOneAsync(x => x.Id == libraryId);
     }
 
-    public async Task<IList<Book>> GetBooks(string libraryId, BookQueryOptions? opts = null)
+    public async Task<PagedData<Book>> GetBooks(string libraryId, BookQueryOptions opts)
     {
         ObjectId id;
         if (!ObjectId.TryParse(libraryId, out id))
-            return new List<Book>();
+            return new PagedData<Book>(new List<Book>(), 0, 0, null);
 
         IFindFluent<BookDocument, BookDocument> query;
 
-        if (string.IsNullOrWhiteSpace(opts?.SearchText))
+        if (string.IsNullOrWhiteSpace(opts.SearchText))
         {
             query = _booksCollection.Find(x => x.LibraryId == libraryId, new FindOptions { Collation = CollationEn });
         }
@@ -85,8 +85,11 @@ public class LibraryService : ILibraryService
         }
 
 
-        var items = await query.SortBy(opts).Paged(opts).ToListAsync();
-        return items.Select(d => d.ToBook()).ToList();
+        var rawItems = await query.SortBy(opts).Paged(opts).ToListAsync();
+        var items = rawItems.Select(d => d.ToBook()).ToList();
+
+        int? nextPage = items.Count < opts.PageSize ? null : opts.PageNumber + 1;
+        return new PagedData<Book>(items, opts.PageNumber, opts.PageSize, nextPage);
     }
 
     private FilterDefinition<BookDocument> GetBookTextFilter(ObjectId libraryId, string searchText)
