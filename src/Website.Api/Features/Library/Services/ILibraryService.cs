@@ -24,4 +24,6 @@ public interface ILibraryService
     public Task UpdateBook(string bookId, BookContent content);
 
     public Task DeleteBook(string bookId);
+
+    public Task<bool> LibraryContainsBook(string libraryId, string isbn);
 }

@@ -150,6 +150,12 @@ public class LibraryService : ILibraryService
     }
 
     public async Task DeleteBook(string bookId) => await _booksCollection.DeleteOneAsync(x => x.Id == bookId);
+
+    public async Task<bool> LibraryContainsBook(string libraryId, string isbn)
+    {
+        return await _booksCollection.Find(x => x.LibraryId == libraryId && x.Isbn == isbn).AnyAsync();
+    }
+
 }
 
 internal static class Extensions

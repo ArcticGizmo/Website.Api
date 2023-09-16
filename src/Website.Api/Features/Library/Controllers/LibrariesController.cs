@@ -67,6 +67,12 @@ public class LibrariesController : ControllerBase
     {
         return await _library.GetBooks(libraryId, opts);
     }
+
+    [HttpGet("{libraryId}/book-exists/{isbn}")]
+    public async Task<bool> BookExists(string libraryId, string isbn)
+    {
+        return await _library.LibraryContainsBook(libraryId, isbn);
+    }
 }
 
 public record CreateLibraryReq(string Name);
