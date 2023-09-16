@@ -41,7 +41,7 @@ public class RecipeService : IRecipeService
         var rawItems = await query.SortBy(opts).Paged(opts).ToListAsync();
         var items = rawItems.Select(d => d.ToRecipe()).ToList();
 
-        var nextPage = items.Count < opts.PageSize ? 0 : opts.PageNumber + 1;
+        int? nextPage = items.Count < opts.PageSize ? null : opts.PageNumber + 1;
         return new PagedData<Recipe>(items, opts.PageNumber, opts.PageSize, nextPage);
     }
 

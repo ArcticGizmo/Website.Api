@@ -39,8 +39,8 @@ public class BooksController : ControllerBase
         await _library.UpdateBook(id, content);
     }
 
-    // [HttpDelete("{id}")]
-    // public async Task DeleteBook(string id) => await _library.DeleteBook(id);
+    [HttpDelete("{id}")]
+    public async Task DeleteBook(string id) => await _library.DeleteBook(id);
 }
 
 public record CreateBookReq(string LibraryId, BookContent Content);

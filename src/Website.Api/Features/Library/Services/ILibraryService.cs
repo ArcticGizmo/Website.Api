@@ -1,3 +1,4 @@
+using Website.Api.Common;
 using Website.Api.Features.Library.Models;
 
 namespace Website.Api.Features.Library.Services;
@@ -14,7 +15,7 @@ public interface ILibraryService
 
     public Task DeleteLibrary(string id);
 
-    public Task<IList<Book>> GetBooks(string libraryId, BookQueryOptions? opts = null);
+    public Task<PagedData<Book>> GetBooks(string libraryId, BookQueryOptions opts);
 
     public Task<Book?> GetBook(string bookId);
 

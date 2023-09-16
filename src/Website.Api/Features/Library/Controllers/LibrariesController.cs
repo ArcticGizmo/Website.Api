@@ -3,16 +3,17 @@ using Website.Api.Features.Library.Models;
 
 using Microsoft.AspNetCore.Authorization;
 using Website.Api.Features.Library.Services;
+using Website.Api.Common;
 
 namespace Website.Api.Features.Library.Controllers;
 
 [ApiController]
 [Route("[controller]")]
 [Authorize]
-public class LibraryController : ControllerBase
+public class LibrariesController : ControllerBase
 {
     private readonly ILibraryService _library;
-    public LibraryController(ILibraryService libraryService)
+    public LibrariesController(ILibraryService libraryService)
     {
         _library = libraryService;
     }
@@ -62,7 +63,7 @@ public class LibraryController : ControllerBase
     // }
 
     [HttpGet("{libraryId}/books")]
-    public async Task<IList<Book>> GetBooks(string libraryId, [FromQuery] BookQueryOptions opts)
+    public async Task<PagedData<Book>> GetBooks(string libraryId, [FromQuery] BookQueryOptions opts)
     {
         return await _library.GetBooks(libraryId, opts);
     }

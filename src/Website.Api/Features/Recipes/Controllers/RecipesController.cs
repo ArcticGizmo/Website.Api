@@ -18,31 +18,10 @@ public class RecipesController : ControllerBase
         _recipe = RecipeService;
     }
 
-    // [HttpGet]
-    // public async Task<PagedData<Recipe>> GetRecipes([FromQuery] RecipeQueryOptions opts)
-    // {
-    //     return await _recipe.GetRecipes(opts);
-    // }
-
-    private readonly List<Recipe> _local = new List<Recipe>(){
-        new() {Id = "1", Content = new() {Name = "A"}},
-        new() {Id = "2", Content = new() {Name = "B"}},
-        new() {Id = "3", Content = new() {Name = "C"}},
-        new() {Id = "4", Content = new() {Name = "D"}},
-        new() {Id = "5", Content = new() {Name = "E"}},
-        new() {Id = "6", Content = new() {Name = "F"}},
-        new() {Id = "7", Content = new() {Name = "G"}},
-        new() {Id = "8", Content = new() {Name = "H"}},
-        new() {Id = "9", Content = new() {Name = "I"}},
-        new() {Id = "10", Content = new() {Name = "J"}},
-    };
-
     [HttpGet]
     public async Task<PagedData<Recipe>> GetRecipes([FromQuery] RecipeQueryOptions opts)
     {
-        var data = _local.Skip(opts.PageSize * opts.PageNumber).Take(opts.PageSize).ToList();
-        int? nextPage = data.Count() < opts.PageSize ? null : opts.PageNumber + 1;
-        return new PagedData<Recipe>(data, opts.PageNumber, opts.PageSize, nextPage);
+        return await _recipe.GetRecipes(opts);
     }
 
     [HttpGet("{id}")]
