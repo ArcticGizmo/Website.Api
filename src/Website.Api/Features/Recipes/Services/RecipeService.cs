@@ -49,7 +49,7 @@ public class RecipeService : IRecipeService
     {
         var reg = new BsonRegularExpression(searchText, "i");
         var builder = Builders<RecipeDocument>.Filter;
-        return builder.Regex("name", reg) | builder.AnyEq("tags", reg);
+        return builder.Regex("Name", reg) | builder.AnyEq("Tags", reg);
     }
 
 
