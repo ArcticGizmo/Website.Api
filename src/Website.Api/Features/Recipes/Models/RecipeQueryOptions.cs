@@ -10,6 +10,4 @@ public class RecipeQueryOptions : ITextQueryOptions, IPagedQueryOptions, ISortab
     public required int PageSize { get; init; }
 
     public string? SortBy { get; init; } = "title";
-
-    public bool? SortDecending { get; init; }
 }

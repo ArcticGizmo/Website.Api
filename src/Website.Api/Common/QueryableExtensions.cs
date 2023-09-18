@@ -1,4 +1,5 @@
 using MongoDB.Driver;
+using Website.Api.Features.Recipes.Models;
 
 
 namespace Website.Api.Common;
@@ -17,17 +18,41 @@ public static class QueryableExtensions
         if (opts is null || string.IsNullOrEmpty(opts.SortBy))
             return query;
 
-        if (opts.SortDecending == true)
+        var fields = opts.SortBy.Split("|").Select(ToSortField).ToList();
+
+        var sorter = Builders<T>.Sort.DirectionalSortBy(fields[0]);
+
+        for (int i = 1; i < fields.Count; i++)
         {
-            var sorter = Builders<T>.Sort.Descending(opts.SortBy);
-            return query.Sort(sorter);
+            sorter = sorter.DirectionalSortBy(fields[i]);
         }
-        else
+
+        return query.Sort(sorter);
+    }
+
+    private static SortField ToSortField(string text)
+    {
+        var parts = text.Split(":");
+
+        if (parts.Length == 1)
         {
-            var sorter = Builders<T>.Sort.Ascending(opts.SortBy);
-            return query.Sort(sorter);
+            return new SortField(text, true);
         }
+
+        return new SortField(parts[0], parts[1] == "1");
+    }
+
+    private static SortDefinition<T> DirectionalSortBy<T>(this SortDefinitionBuilder<T> query, SortField field)
+    {
+        return field.Ascending ? query.Ascending(field.Field) : query.Descending(field.Field);
+    }
+
+    private static SortDefinition<T> DirectionalSortBy<T>(this SortDefinition<T> query, SortField field)
+    {
+        return field.Ascending ? query.Ascending(field.Field) : query.Descending(field.Field);
     }
 }
+
+internal record SortField(string Field, bool Ascending);
 
 

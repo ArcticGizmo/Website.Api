@@ -10,6 +10,4 @@ public class BookQueryOptions : ITextQueryOptions, IPagedQueryOptions, ISortable
     public required int PageSize { get; init; }
 
     public string? SortBy { get; init; } = "title";
-
-    public bool? SortDecending { get; init; }
 }

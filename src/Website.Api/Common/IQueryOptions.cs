@@ -14,5 +14,4 @@ public interface ITextQueryOptions
 public interface ISortable
 {
     public string? SortBy { get; init; }
-    public bool? SortDecending { get; init; }
 }

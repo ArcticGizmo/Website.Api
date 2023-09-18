@@ -5,6 +5,8 @@ public class BookContent
     public string? Isbn { get; set; }
     public required string Title { get; set; }
 
+    public string? Author { get; set; }
+
     public required List<string> Authors { get; set; } = new();
 
     public string? Series { get; set; }

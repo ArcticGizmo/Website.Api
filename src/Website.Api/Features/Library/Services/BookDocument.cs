@@ -19,6 +19,9 @@ public class BookDocument
 
     public required string Title { get; set; }
 
+    [BsonElement("author")]
+    public string? Author { get; set; }
+
     [BsonElement("authors")]
 
     public required List<string> Authors { get; set; } = new();

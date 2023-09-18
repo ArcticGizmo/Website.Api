@@ -11,7 +11,7 @@ public class LibraryService : ILibraryService
     const string LibraryCollection = "Libraries";
     const string BookCollection = "Books";
 
-    private static Collation CollationEn = new Collation("en", strength: CollationStrength.Primary);
+    private static readonly Collation CollationEn = new("en", strength: CollationStrength.Primary);
 
     private readonly IMongoDatabase _db;
     private readonly IMongoCollection<LibraryDocument> _libraryCollection;
@@ -114,6 +114,7 @@ public class LibraryService : ILibraryService
             LibraryId = libraryId,
             Isbn = content.Isbn,
             Title = content.Title,
+            Author = content.Authors.FirstOrDefault(),
             Authors = content.Authors,
             Series = content.Series,
             BookInSeries = content.BookInSeries,
@@ -135,6 +136,7 @@ public class LibraryService : ILibraryService
         var doc = await _booksCollection.Find(x => x.Id == bookId).FirstAsync();
         doc.Isbn = content.Isbn;
         doc.Title = content.Title;
+        doc.Author = content.Authors.FirstOrDefault();
         doc.Authors = content.Authors;
         doc.Series = content.Series;
         doc.BookInSeries = content.BookInSeries;
@@ -181,6 +183,7 @@ internal static class Extensions
             {
                 Title = doc.Title,
                 Isbn = doc.Isbn,
+                Author = doc.Author,
                 Authors = doc.Authors,
                 BookInSeries = doc.BookInSeries,
                 Series = doc.Series,
